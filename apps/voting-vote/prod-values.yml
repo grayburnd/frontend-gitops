@@ -1,0 +1,42 @@
+team: frontend
+environment: prod
+labels:
+  app: voting
+  component: vote
+  env: prod
+  team: frontend
+replicas: "1"
+aws:
+  accountId: "AWS_ACCOUNT_ID_REDACTED"
+  region: us-east-1
+image:
+  name: vote
+  tag: 11
+ports:
+  - containerPort: 80
+envFrom: #[]
+  - configMapRef:
+      name: redis-connection
+env:
+  - name: REDIS_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: redis-secret
+        key: password
+gateway:
+  name: pub-gateway
+  namespace: platform-prod
+service:
+  port: 8080
+  type: ClusterIP ##For IP Target Type
+  targetPort: 80
+  protocol: TCP
+httpRoute:
+  rules:
+    matches:
+      - path:
+          type: PathPrefix
+          value: /vote
+    filters: []
+targetGroup:
+  path: /vote

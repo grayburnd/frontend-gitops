@@ -1,0 +1,27 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: {{ .Values.redisExternalParameter.name }}
+  namespace: {{ .Values.team }}-{{ .Values.environment }}
+spec:
+  refreshPolicy: CreatedOnce
+  target:
+    # Disable the default behavior of creating a Secret
+    creationPolicy: Merge 
+    template:
+      engineVersion: v2
+      # The manifest block tells ESO to create a custom resource instead
+      manifest: |
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: {{ .Values.redisExternalParameter.name }}
+          namespace: {{ .Values.team }}-{{ .Values.environment }}
+        data: {{ . | toMap | toJson }}
+  dataFrom:
+    # This grabs EVERY parameter that lives under this AWS prefix path
+    - find:
+        path: {{ .Values.redisExternalParameter.name }}
+  secretStoreRef:   
+    name: {{ .Values.redisExternalParameter.storeRef }}
+    kind: ClusterSecretStore           

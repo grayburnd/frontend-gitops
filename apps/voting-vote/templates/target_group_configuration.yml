@@ -1,0 +1,13 @@
+{{- if not (eq .Values.targetGroup.path "/") }}
+apiVersion: gateway.k8s.aws/v1
+kind: TargetGroupConfiguration
+metadata:
+  name: {{ .Chart.Name }}-tg-config
+  namespace: {{ .Values.team }}-{{ .Values.environment }}
+spec:
+  targetReference:
+    name: {{ .Chart.Name }}-service
+  defaultConfiguration:
+    healthCheckConfig:
+      healthCheckPath: {{ .Values.targetGroup.path }} ##Expects health check at that path
+{{- end -}}

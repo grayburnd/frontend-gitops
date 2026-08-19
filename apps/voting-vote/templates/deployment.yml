@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Values.team }}-{{ .Values.environment }}
+  labels: {{ toYamlPretty .Values.labels | nindent 4 }}
+  name: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels: {{ toYamlPretty .Values.labels | nindent 6 }}
+  template:
+    metadata:
+      labels: {{ toYamlPretty .Values.labels | nindent 8 }}
+    spec:
+      serviceAccountName: {{ .Chart.Name}}-sa
+      containers:
+        - image: {{ .Values.aws.accountId }}.dkr.ecr.{{ .Values.aws.region }}.amazonaws.com/{{ .Values.image.name }}:{{ .Values.image.tag }}
+          name: {{ .Values.image.name }}
+          {{- with .Values.ports }}
+          ports: {{- toYamlPretty . | nindent 12 -}}
+          {{- end }}
+          {{- with .Values.envFrom }}
+          envFrom: {{- toYamlPretty . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.env }}
+          env: {{ toYamlPretty . | nindent 12 }}
+          {{- end }}
+            
