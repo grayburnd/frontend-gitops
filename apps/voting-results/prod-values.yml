@@ -1,0 +1,54 @@
+team: frontend
+environment: prod
+labels:
+  app: voting
+  component: results
+  env: prod
+  team: frontend
+replicas: "1"
+aws:
+  accountId: "632988741882"
+  region: us-east-1
+image:
+  name: results
+  tag: 11
+ports:
+  - containerPort: "80"
+envFrom: #[]
+  - configMapRef:
+      name: postgres-connection
+env: #[]
+  - name: BASE_PATH
+    value: /result
+  - name: DB_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: db-admin-backend-credentials
+        key: username
+  - name: DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: db-admin-backend-credentials
+        key: password
+gateway:
+  name: pub-gateway
+  namespace: platform-prod
+service:
+  port: "8080"
+  type: ClusterIP ##For IP Target Type
+  targetPort: "80"
+  protocol: TCP
+httpRoute:
+  rules:
+    matches:
+      - path:
+          type: PathPrefix
+          value: /results
+    filters:
+      - type: URLRewrite
+        urlRewrite:
+          path:
+            type: ReplaceFullPath
+            replaceFullPath: /
+targetGroup:
+  path: /

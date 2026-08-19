@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Chart.Name}}-sa
+  namespace: {{ .Values.team }}-{{ .Values.environment }}
+  # annotations:
+  #   eks.amazonaws.com/role-arn: 
