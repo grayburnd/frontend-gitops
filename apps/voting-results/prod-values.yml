@@ -28,7 +28,7 @@ env: #[]
   - name: DB_PASSWORD
     valueFrom:
       secretKeyRef:
-        name: db-admin-backend-credentials
+        name: db-admin.postgres.credentials
         key: password
 gateway:
   name: pub-gateway
