@@ -16,7 +16,7 @@ spec:
     template:
       engineVersion: v2
       data:
-        "{{ '{{ . | toJson }}' }}"
+        "{{ "{{ . | toJson }}" }}"
   dataFrom:
     - extract:
         key: {{ .Values.redisExternalParameter.name }}
