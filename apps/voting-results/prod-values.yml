@@ -11,7 +11,7 @@ aws:
   region: us-east-1
 image:
   name: results
-  tag: 11
+  tag: v0.0.1
 ports:
   - containerPort: "80"
 envFrom: #[]
