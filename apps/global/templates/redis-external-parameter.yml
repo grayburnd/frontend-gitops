@@ -13,10 +13,6 @@ spec:
     manifest:
       apiVersion: v1
       kind: ConfigMap ##Creates a configmap instead of a secret
-    template:
-      engineVersion: v2
   dataFrom:
-    - extract:
+    - extract: 
         key: {{ .Values.redisExternalParameter.name }}
-        conversionStrategy: Default
-        decodingStrategy: Auto
