@@ -13,6 +13,7 @@ spec:
     manifest:
       apiVersion: v1
       kind: ConfigMap ##Creates a configmap instead of a secret
+      data: {}
     template:
       engineVersion: v2
   dataFrom:
