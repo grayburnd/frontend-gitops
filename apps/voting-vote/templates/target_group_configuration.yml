@@ -4,6 +4,8 @@ kind: TargetGroupConfiguration
 metadata:
   name: {{ .Chart.Name }}-tg-config
   namespace: {{ .Values.team }}-{{ .Values.environment }}
+  annotations:
+    argocd.argoproj.io/sync-wave: '3'
 spec:
   targetReference:
     name: {{ .Chart.Name }}-service
