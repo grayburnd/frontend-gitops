@@ -13,6 +13,14 @@ spec:
     manifest:
       apiVersion: v1
       kind: ConfigMap ##Creates a configmap instead of a secret
+  template:
+      engineVersion: v2
+      data:
+        # Loop over every key in the extracted JSON object dynamically
+        {{- $json := .Values.redisExternalParameter.name | fromJson -}}
+        {{- range $key, $value := $json }}
+        {{ $key }}: '{{ $value }}'
+        {{- end }}
   dataFrom:
     - extract: 
         key: {{ .Values.redisExternalParameter.name }}
