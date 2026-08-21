@@ -15,4 +15,4 @@ spec:
       kind: ConfigMap ##Creates a configmap instead of a secret
   dataFrom:
     - extract: 
-        key: {{ .Values.redisExternalParameter.name }}
+        key: {{ .Values.postgresExternalParameter.name }}
