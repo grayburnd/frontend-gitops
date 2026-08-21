@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.postgresExternalParameter.name }}
   namespace: {{ .Values.team }}-{{ .Values.environment }}
 spec:
-  refreshPolicy: CreatedOnce
+  refreshPolicy: OnChange
   secretStoreRef:
     name: {{ .Values.postgresExternalParameter.storeRef }}
     kind: ClusterSecretStore
