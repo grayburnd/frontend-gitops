@@ -19,7 +19,7 @@ envFrom: #[]
       name: postgres-connection
 env: #[]
   - name: BASE_PATH
-    value: /result
+    value: /results
   - name: DB_USERNAME
     valueFrom:
       secretKeyRef:
