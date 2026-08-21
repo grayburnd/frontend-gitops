@@ -4,7 +4,7 @@ metadata:
   name: {{ .Values.redisExternalParameter.name }}
   namespace: {{ .Values.team }}-{{ .Values.environment }}
 spec:
-  refreshPolicy: CreatedOnce
+  refreshPolicy: OnChange
   secretStoreRef:
     name: {{ .Values.redisExternalParameter.storeRef }}
     kind: ClusterSecretStore
