@@ -4,6 +4,8 @@ metadata:
   namespace: {{ .Values.team }}-{{ .Values.environment }}
   labels: {{ toYamlPretty .Values.labels | nindent 4}}
   name: {{ .Chart.Name }}-service
+  annotations:
+    argocd.argoproj.io/sync-wave: '2'
 spec:
 {{- with .Values.service }}
   type: {{ .type }}

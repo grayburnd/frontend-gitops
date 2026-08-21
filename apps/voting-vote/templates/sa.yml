@@ -3,5 +3,7 @@ kind: ServiceAccount
 metadata:
   name: {{ .Chart.Name}}-sa
   namespace: {{ .Values.team }}-{{ .Values.environment }}
+  annotations:
+    argocd.argoproj.io/sync-wave: '0'
   # annotations:
   #   eks.amazonaws.com/role-arn: 
