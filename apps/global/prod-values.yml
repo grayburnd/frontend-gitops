@@ -9,13 +9,13 @@ aws:
   region: us-east-1
 redisExternalSecret:
   name: redis-secret
-  storeRef: prod-clusterSecretStore_secrets_manager ##Secret Store Ref to use
+  storeRef: prod-cluster-secret-store-secrets-manager ##Secret Store Ref to use
 redisExternalParameter:
   name: redis-connection
-  storeRef: prod-clusterSecretStore_parameter_store ##Secret Store Ref to use
+  storeRef: prod-cluster-secret-store-parameter-store ##Secret Store Ref to use
 postgresExternalParameter:
   name: postgres-connection
-  storeRef: prod-clusterSecretStore_parameter_store ##Secret Store Ref to use
+  storeRef: prod-cluster-secret-store-parameter-store ##Secret Store Ref to use
 postgresExternalSecret:
   name: db-admin-backend-credentials
-  storeRef: prod-clusterSecretStore_secrets_manager ##Secret Store Ref to use
+  storeRef: prod-cluster-secret-store-secrets-manager ##Secret Store Ref to use
