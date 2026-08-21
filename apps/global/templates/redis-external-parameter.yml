@@ -15,7 +15,6 @@ spec:
       kind: ConfigMap ##Creates a configmap instead of a secret
     template:
       engineVersion: v2
-      kind: ConfigMap
   dataFrom:
     - extract:
         key: {{ .Values.redisExternalParameter.name }}
