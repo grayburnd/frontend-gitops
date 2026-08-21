@@ -15,8 +15,7 @@ spec:
       kind: ConfigMap ##Creates a configmap instead of a secret
   template:
       engineVersion: v2
-      data:
-        # Loop over every key in the extracted JSON object dynamically
+      data: |
         {{- $json := .Values.redisExternalParameter.name | fromJson -}}
         {{- range $key, $value := $json }}
         {{ $key }}: '{{ $value }}'
