@@ -1,0 +1,10 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Chart.Name}}-sa
+  labels: {{ toYamlPretty .Values.labels | nindent 4 }}
+spec:
+  selector:
+    matchLabels: {{ toYamlPretty .Values.labels | nindent 6 }}
+  endpoints:
+    - port: {{ .Values.service.port.name }}
