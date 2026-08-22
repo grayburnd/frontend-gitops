@@ -27,7 +27,9 @@ gateway:
   name: pub-gateway
   namespace: platform-prod
 service:
-  port: 8080
+  port: 
+    number: 8080
+    name: web
   type: ClusterIP ##For IP Target Type
   targetPort: 80
   protocol: TCP
