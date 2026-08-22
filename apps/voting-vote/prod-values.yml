@@ -42,3 +42,5 @@ httpRoute:
     filters: []
 targetGroup:
   path: /vote
+metrics:
+  path: /metrics

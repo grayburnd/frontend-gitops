@@ -8,3 +8,4 @@ spec:
     matchLabels: {{ toYamlPretty .Values.labels | nindent 6 }}
   endpoints:
     - port: {{ .Values.service.port.name }}
+      path: {{ .Values.metrics.path }}
