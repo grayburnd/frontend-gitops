@@ -15,7 +15,7 @@ spec:
   rules:
     - backendRefs:
         - name: {{ .Chart.Name }}-service
-          port: {{ .Values.service.port }}
+          port: {{ .Values.service.port.number }}
       matches: {{ toYamlPretty .Values.httpRoute.rules.matches | nindent 8 }}
       {{- with .Values.httpRoute.rules.filters }}
       filters: {{ toYamlPretty . | nindent 8 }}
