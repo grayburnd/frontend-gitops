@@ -11,7 +11,7 @@ aws:
   region: us-east-1
 image:
   name: vote
-  tag: 6
+  tag: 7
 ports:
   - containerPort: 80
 envFrom: #[]
