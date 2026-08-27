@@ -6,8 +6,8 @@ securityGroup:
 iamRoleName:
   node: KarpenterNodeRole-main-eks-cluster ##Change
 ami:
-  aliasName: bottlerocket
-  pinnedVersion: v1.64.0
+  aliasName: al2023
+  pinnedVersion: v20260817
 imdsV2Required: true #bool
 detailedMonitoring: false
 associatePublicIPAddress: false
