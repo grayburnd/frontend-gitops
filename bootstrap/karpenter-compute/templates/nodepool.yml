@@ -59,7 +59,7 @@ spec:
       requirements:
         - key: "karpenter.k8s.aws/instance-category"
           operator: In
-          values: {{ .categories }}
+          values: {{ .categories | toJson }}
           # minValues here enforces the scheduler to consider at least that number of unique instance-category to schedule the pods.
           # This field is ALPHA and can be dropped or replaced at any time
           minValues: {{ .categories | len }}
