@@ -1,0 +1,57 @@
+apiVersion: argoproj.io/v1alpha1 ##See if can take either helm 3rd party with own apps or just one of them. May need seperate appset.
+kind: ApplicationSet
+metadata:
+  name: appset-bootstrap
+  namespace: frontend-prod ##Only for Prod
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - matrix: #Used to create seperate env for every app folder detected
+        generators:
+          - git:
+              repoURL: https://github.com/grayburnd/frontend-gitops.git
+              revision: HEAD
+              directories:
+                - path: bootstrap/*   
+          - list:
+              elements:
+                - env: prod
+                  team: frontend
+                  cluster: https://kubernetes.default.svc
+                  repoURL: https://github.com/grayburnd/frontend-gitops.git
+                  prune: true
+                  selfHeal: true
+                # - env: staging
+                # - env: dev
+
+  template:      
+    metadata:
+      name: '{{ index .path.segments 1 }}' 
+    spec:
+      # The project the application belongs to.
+      project: '{{ .team }}'
+      # Source of the application manifests
+      source:
+        repoURL: '{{ .repoURL }}'
+        path: '{{ .path.path }}'
+        targetRevision: HEAD ##Check
+        helm:
+          valueFiles:
+            - '{{ .env }}-values.yml'      
+      # Destination cluster and namespace to deploy the application
+      destination:
+        server: '{{ .cluster }}'
+        namespace: '{{ .team }}-{{ .env }}'
+      # Sync policy
+      syncPolicy:
+        syncOptions:
+          - ServerSideApply=true ##Useful for large resources i.e CRDs
+          - ApplyOutOfSyncOnly=true  
+  templatePatch: |
+    spec:
+      syncPolicy:
+        automated:
+          prune: {{ .prune }}
+          selfHeal: {{ .selfHeal }}
+      
