@@ -1,4 +1,4 @@
-team: frotnend
+team: frontend
 subnet:
   ids: ["subnet-0e8cb8a44ecb02c26", "subnet-01330e997314c7aa1"] ##Change
 securityGroup:
