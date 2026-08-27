@@ -7,13 +7,22 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-wave: '1'
 spec:
-  replicas: {{ .Values.replicas }}
   selector:
     matchLabels: {{ toYamlPretty .Values.labels | nindent 6 }}
   template:
     metadata:
       labels: {{ toYamlPretty .Values.labels | nindent 8 }}
     spec:
+      resources: {{ toYamlPretty .Values.resources | nindent 8 }}
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: team
+                operator: In
+                values:
+                  - {{ .Values.team }}
       serviceAccountName: {{ .Chart.Name}}-sa
       containers:
         - image: {{ .Values.aws.accountId }}.dkr.ecr.{{ .Values.aws.region }}.amazonaws.com/{{ .Values.image.name }}:{{ .Values.image.tag }}
