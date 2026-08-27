@@ -7,7 +7,7 @@ iamRoleName:
   node: KarpenterNodeRole-main-eks-cluster ##Change
 ami:
   aliasName: al2023
-  pinnedVersion: v20260817
+  pinnedVersion: v20260818
 imdsV2Required: true #bool
 detailedMonitoring: false
 associatePublicIPAddress: false
