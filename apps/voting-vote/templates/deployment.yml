@@ -13,6 +13,7 @@ spec:
     metadata:
       labels: {{ toYamlPretty .Values.labels | nindent 8 }}
     spec:
+      securityContext: {{ toYamlPretty .Values.securityContext | nindent 8 }}
       resources: {{ toYamlPretty .Values.resources | nindent 8 }}
       affinity:
         nodeAffinity:
@@ -36,4 +37,6 @@ spec:
           {{- with .Values.env }}
           env: {{ toYamlPretty . | nindent 12 }}
           {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
             

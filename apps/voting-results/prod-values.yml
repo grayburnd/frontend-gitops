@@ -9,6 +9,11 @@ replicas: "1"
 aws:
   accountId: "632988741882"
   region: us-east-1
+securityContext:
+  runAsGroup: 999 #appgroup
+  runAsNonRoot: true
+  runAsUser: 999 #appuser
+  fsGroup: 999
 image:
   name: voting-results
   tag: 1
