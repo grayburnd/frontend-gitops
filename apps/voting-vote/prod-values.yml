@@ -10,7 +10,7 @@ aws:
   accountId: "632988741882"
   region: us-east-1
 image:
-  name: vote
+  name: voting-vote
   tag: 8
 ports:
   - containerPort: 80
