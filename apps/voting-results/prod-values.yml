@@ -16,7 +16,7 @@ securityContext:
   fsGroup: 999
 image:
   name: voting-results
-  tag: 1
+  tag: 8f47681e88578c06595a7d19c8698c544d223f91
 ports:
   - containerPort: 80
 envFrom: #[]
@@ -39,7 +39,7 @@ gateway:
   name: pub-gateway
   namespace: platform-prod
 service:
-  port: 
+  port:
     number: 8080
     name: web
   type: ClusterIP ##For IP Target Type
@@ -65,7 +65,7 @@ scaling:
   targetCPUUtilizationPercentage: 60
   targetMemoryUtilizationPercentage: 60
 resources:
-  requests: 
+  requests:
     cpu: "0.25"
     memory: "0.25Gi"
 pdb:
