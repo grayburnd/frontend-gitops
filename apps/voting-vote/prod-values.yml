@@ -5,7 +5,6 @@ labels:
   component: vote
   env: prod
   team: frontend
-replicas: "1"
 aws:
   accountId: "632988741882"
   region: us-east-1
