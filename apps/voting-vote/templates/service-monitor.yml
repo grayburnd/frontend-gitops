@@ -1,7 +1,7 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: {{ .Chart.Name}}-sa
+  name: {{ .Chart.Name}}-service-monitor
   labels: ##release needed so prometheus picks up the ServiceMonitor
     release: kube-prometheus-stack-prod {{ toYamlPretty .Values.labels | nindent 4 }}
 spec:
