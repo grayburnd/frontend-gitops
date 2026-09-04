@@ -12,4 +12,8 @@ spec:
   defaultConfiguration:
     healthCheckConfig:
       healthCheckPath: {{ .Values.targetGroup.path }} ##Expects health check at that path
+      healthyThresholdCount: 2
+      healthCheckInterval: 30
+      unhealthyThresholdCount: 3
+      healthCheckTimeout: 15
 {{- end -}}
