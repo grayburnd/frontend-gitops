@@ -1,5 +1,5 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/voting-vote/templates/deployment.yml
+kind: Rollout
 metadata:
   namespace: {{ .Values.team }}-{{ .Values.environment }}
   labels: {{ toYamlPretty .Values.labels | nindent 4 }}
@@ -9,6 +9,12 @@ metadata:
 spec:
   selector:
     matchLabels: {{ toYamlPretty .Values.labels | nindent 6 }}
+  strategy:
+    blueGreen:
+      activeService: {{ .Chart.Name }}-service
+      previewService: {{ .Chart.Name }}-preview-service
+      autoPromotionEnabled: false
+      previewReplicaCount: 1
   template:
     metadata:
       labels: {{ toYamlPretty .Values.labels | nindent 8 }}
