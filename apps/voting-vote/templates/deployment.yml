@@ -1,4 +1,4 @@
-apiVersion: apps/voting-vote/templates/deployment.yml
+apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   namespace: {{ .Values.team }}-{{ .Values.environment }}
