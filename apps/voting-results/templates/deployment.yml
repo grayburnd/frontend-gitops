@@ -39,4 +39,11 @@ spec:
           {{- end }}
           securityContext:
             allowPrivilegeEscalation: false
+          {{- with .Values.livenessProbe }}
+          livenessProbe: {{ . | toYamlPretty | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe: {{ . | toYamlPretty | nindent 12 }}
+          {{- end }}
+
             
