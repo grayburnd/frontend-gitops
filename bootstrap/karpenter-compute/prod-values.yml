@@ -1,8 +1,8 @@
 team: frontend
 subnet:
-  ids: ["subnet-0fed581df0a5b6776", "subnet-020c4e2e4dbda27aa"] ##Change
+  ids: ["subnet-0d4a9f5a8d983a71b", "subnet-01f447b803ab46ddf"] ##Change
 securityGroup:
-  ids: ["sg-0e8ec34f299cf0833"]
+  ids: ["sg-008cbbdc93b8abd01"]
 iamRoleName:
   node: KarpenterNodeRole-main-eks-cluster ##Change
 ami:
