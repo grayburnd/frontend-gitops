@@ -4,10 +4,12 @@ metadata:
   name: {{ .Chart.Name }}-hpa
   namespace: {{ .Values.team }}-{{ .Values.environment }}
   labels: {{ .Values.labels | toYamlPretty | nindent 4 }}
+  annotations:
+    argocd.argoproj.io/sync-wave: '3'
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
+    apiVersion: argoproj.io/v1alpha1
+    kind: Rollout
     name: {{ .Chart.Name }}
   {{- with .Values.scaling }}
   minReplicas: {{ .minReplicas }}

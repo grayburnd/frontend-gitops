@@ -5,7 +5,7 @@ metadata:
   labels: {{ toYamlPretty .Values.labels | nindent 4}}
   name: {{ .Chart.Name }}-preview-service
   annotations:
-    argocd.argoproj.io/sync-wave: '2'
+    argocd.argoproj.io/sync-wave: '0'
 spec:
 {{- with .Values.service }}
   type: {{ .type }}
