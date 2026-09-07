@@ -1,0 +1,54 @@
+name: CI [Lint]
+
+on:
+  pull_request:
+permissions:
+  contents: read
+  pull-requests: read ##GitLeaks required.
+env:
+  ENVIRONMENT: "prod"
+  TARGET_LINT_DIRECTORIES: "'apps' 'bootstrap'" ##Needs to be a Bash List type. See https://stackoverflow.com/questions/44164017/assigning-a-bash-variable-to-be-a-list-of-two-word-strings
+jobs:
+  ci-lint-and-checks:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout local Git Repo
+        uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+
+      - name: Install kubetools
+        uses: yokawasa/action-setup-kube-tools@v0.13.5
+
+      - uses: gitleaks/gitleaks-action@v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Helm lint all k8s manifests
+        run: |
+          for dir in ${{ env.TARGET_LINT_DIRECTORIES }}; do
+            original_dir=$(pwd)
+            echo "===VALIDATING K8S $dir MANIFESTS==="
+            for app in $(ls ${dir}/); do
+              cd ${dir}/${app}
+              helm lint -f=${{ env.ENVIRONMENT }}-values.yml . &
+              wait $!
+              cd ${original_dir};
+            done;
+          done;
+    
+#We use -ignore-missing-schemas to exclude custom CRDs for simplicity/demo purposes
+#We use -strict to disallow additional properties not in schema or duplicated keys
+      - name: Kubeconform validate all app manifests
+        run: |
+          for dir in ${{ env.TARGET_LINT_DIRECTORIES }}; do
+            original_dir=$(pwd)
+            echo "===VALIDATING K8S $dir MANIFESTS==="
+            for app in $(ls ${dir}/); do
+              cd ${dir}/${app}
+              helm template . -f ${{ env.ENVIRONMENT }}-values.yml | kubeconform -ignore-missing-schemas -strict &
+              wait $!
+              cd ${original_dir};
+            done;
+          done;
