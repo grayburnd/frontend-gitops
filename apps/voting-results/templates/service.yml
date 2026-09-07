@@ -6,6 +6,7 @@ metadata:
   name: {{ .Chart.Name }}-service
   annotations:
     argocd.argoproj.io/sync-wave: '0'
+    argocd.argoproj.io/sync-options: ServerSideApply=false #https://github.com/argoproj/argo-rollouts/issues/3437
 spec:
 {{- with .Values.service }}
   type: {{ .type }}
