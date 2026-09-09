@@ -19,11 +19,10 @@ spec:
                 - env: prod
                   team: frontend
                   cluster: https://kubernetes.default.svc
-                  repoURL: https://github.com/grayburnd/frontend-gitops.git
+                  configRepoURL: https://github.com/grayburnd/frontend-gitops.git
+                  valuesRepoURL: https://github.com/grayburnd/private-gitops-config.git
                   prune: true
                   selfHeal: true
-                # - env: staging
-                # - env: dev
 
   template:      
     metadata:
@@ -32,13 +31,17 @@ spec:
       # The project the application belongs to.
       project: '{{ .team }}'
       # Source of the application manifests
-      source:
-        repoURL: '{{ .repoURL }}'
-        path: '{{ .path.path }}'
-        targetRevision: HEAD ##Check
-        helm:
-          valueFiles:
-            - '{{ .env }}-values.yml'      
+      sources:
+        - repoURL: '{{ .configRepoURL }}'
+          path: '{{ .path.path }}'
+          targetRevision: HEAD ##Check
+          helm:
+            valueFiles:
+              - $values/'{{ .env }}-values.yml'
+        - repoURL: '{{ .valuesRepoURL }}'
+          targetRevision: HEAD
+          ref: values
+
       # Destination cluster and namespace to deploy the application
       destination:
         server: '{{ .cluster }}'
