@@ -5,11 +5,13 @@ on:
 permissions:
   contents: read
   pull-requests: read ##GitLeaks required.
-env:
-  ENVIRONMENT: "prod"
-  TARGET_LINT_DIRECTORIES: "'apps' 'bootstrap'" ##Needs to be a Bash List type. See https://stackoverflow.com/questions/44164017/assigning-a-bash-variable-to-be-a-list-of-two-word-strings
+# env:
+#   TARGET_LINT_DIRECTORIES: "'apps' 'bootstrap'" ##Needs to be a Bash List type. See https://stackoverflow.com/questions/44164017/assigning-a-bash-variable-to-be-a-list-of-two-word-strings
 jobs:
   ci-lint-and-checks:
+    environment:
+      name: prod
+      deployment: false
     runs-on: ubuntu-latest
     steps:
 
@@ -17,6 +19,22 @@ jobs:
         uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
+
+      - uses: actions/create-github-app-token@v3
+        id: app-token
+        with:
+          # required
+          client-id: ${{ vars.APP_CLIENT_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+          owner: ${{ github.repository_owner }}
+
+      - name: Checkout Helm values repo
+        uses: actions/checkout@v7.0.1
+        with:
+          repository: grayburnd/private-gitops-config
+          token: ${{ steps.app-token.outputs.token }}
+          ref: 'main'
+          path: values
 
       - name: Install kubetools
         uses: yokawasa/action-setup-kube-tools@v0.13.5
@@ -27,12 +45,12 @@ jobs:
 
       - name: Helm lint all k8s manifests
         run: |
-          for dir in ${{ env.TARGET_LINT_DIRECTORIES }}; do
+          for dir in ${{ vars.TARGET_LINT_DIRECTORIES }}; do
             original_dir=$(pwd)
             echo "===VALIDATING K8S $dir MANIFESTS==="
             for app in $(ls ${dir}/); do
               cd ${dir}/${app}
-              helm lint -f=${{ env.ENVIRONMENT }}-values.yml . &
+              helm lint -f=values/${{ vars.ENVIRONMENT }}-values.yml . &
               wait $!
               cd ${original_dir};
             done;
@@ -42,12 +60,12 @@ jobs:
 #We use -strict to disallow additional properties not in schema or duplicated keys
       - name: Kubeconform validate all app manifests
         run: |
-          for dir in ${{ env.TARGET_LINT_DIRECTORIES }}; do
+          for dir in ${{ vars.TARGET_LINT_DIRECTORIES }}; do
             original_dir=$(pwd)
             echo "===VALIDATING K8S $dir MANIFESTS==="
             for app in $(ls ${dir}/); do
               cd ${dir}/${app}
-              helm template . -f ${{ env.ENVIRONMENT }}-values.yml | kubeconform -ignore-missing-schemas -strict &
+              helm template . -f=values/${{ vars.ENVIRONMENT }}-values.yml | kubeconform -ignore-missing-schemas -strict &
               wait $!
               cd ${original_dir};
             done;
