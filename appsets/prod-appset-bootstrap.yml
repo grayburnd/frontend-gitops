@@ -20,7 +20,7 @@ spec:
                   team: frontend
                   cluster: https://kubernetes.default.svc
                   configRepoURL: https://github.com/grayburnd/frontend-gitops.git
-                  valuesRepoURL: https://github.com/grayburnd/private-gitops-config.git
+                  valuesRepoURL: https://github.com/grayburnd/private-gitops-values.git
                   prune: true
                   selfHeal: true
 
