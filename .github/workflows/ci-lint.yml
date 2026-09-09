@@ -45,12 +45,13 @@ jobs:
 
       - name: Helm lint all k8s manifests
         run: |
+          set -e -E -u -o pipefail
           for dir in ${{ vars.TARGET_LINT_DIRECTORIES }}; do
             original_dir=$(pwd)
             echo "===VALIDATING K8S $dir MANIFESTS==="
             for app in $(ls ${dir}/); do
               cd ${dir}/${app}
-              helm lint -f=values/${{ vars.ENVIRONMENT }}-values.yml . &
+              helm lint -f=../../values/${{ vars.TEAM }}-gitops/${dir}/${app}/${{ vars.ENVIRONMENT }}-values.yml . &
               wait $!
               cd ${original_dir};
             done;
@@ -60,12 +61,13 @@ jobs:
 #We use -strict to disallow additional properties not in schema or duplicated keys
       - name: Kubeconform validate all app manifests
         run: |
+          set -e -E -u -o pipefail
           for dir in ${{ vars.TARGET_LINT_DIRECTORIES }}; do
             original_dir=$(pwd)
             echo "===VALIDATING K8S $dir MANIFESTS==="
             for app in $(ls ${dir}/); do
               cd ${dir}/${app}
-              helm template . -f=values/${{ vars.ENVIRONMENT }}-values.yml | kubeconform -ignore-missing-schemas -strict &
+              helm template . -f=../../values/${{ vars.TEAM }}-gitops/${dir}/${app}/${{ vars.ENVIRONMENT }}-values.yml | kubeconform -ignore-missing-schemas -strict &
               wait $!
               cd ${original_dir};
             done;
