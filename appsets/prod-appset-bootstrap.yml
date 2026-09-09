@@ -37,7 +37,7 @@ spec:
           targetRevision: HEAD ##Check
           helm:
             valueFiles:
-              - $values/'{{ .env }}-values.yml'
+              - $values/{{ .team }}-gitops/{{ .path.path }}/{{ .env }}-values.yml
         - repoURL: '{{ .valuesRepoURL }}'
           targetRevision: HEAD
           ref: values
