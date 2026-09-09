@@ -31,7 +31,7 @@ jobs:
       - name: Checkout Helm values repo
         uses: actions/checkout@v7.0.1
         with:
-          repository: grayburnd/private-gitops-config
+          repository: grayburnd/private-gitops-values
           token: ${{ steps.app-token.outputs.token }}
           ref: 'main'
           path: values
