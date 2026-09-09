@@ -16,7 +16,7 @@ securityContext:
   fsGroup: 999
 image:
   name: voting-results
-  tag: a1e274b9de9db01cb3dec02d928dd8813d31ef7c
+  tag: 035bd1783fd295031e8c26c9ac90d73bf8830d4f
 ports:
   - containerPort: 80
 envFrom: #[]
