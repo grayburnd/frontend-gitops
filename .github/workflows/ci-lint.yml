@@ -5,8 +5,6 @@ on:
 permissions:
   contents: read
   pull-requests: read ##GitLeaks required.
-# env:
-#   TARGET_LINT_DIRECTORIES: "'apps' 'bootstrap'" ##Needs to be a Bash List type. See https://stackoverflow.com/questions/44164017/assigning-a-bash-variable-to-be-a-list-of-two-word-strings
 jobs:
   ci-lint-and-checks:
     environment:
