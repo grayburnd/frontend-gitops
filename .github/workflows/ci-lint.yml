@@ -5,8 +5,6 @@ on:
 permissions:
   contents: read
   pull-requests: read ##GitLeaks required.
-# env:
-#   TARGET_LINT_DIRECTORIES: "'apps' 'bootstrap'" ##Needs to be a Bash List type. See https://stackoverflow.com/questions/44164017/assigning-a-bash-variable-to-be-a-list-of-two-word-strings
 jobs:
   ci-lint-and-checks:
     environment:
@@ -45,30 +43,18 @@ jobs:
 
       - name: Helm lint all k8s manifests
         run: |
-          set -e -E -u -o pipefail
-          for dir in ${{ vars.TARGET_LINT_DIRECTORIES }}; do
-            original_dir=$(pwd)
-            echo "===VALIDATING K8S $dir MANIFESTS==="
-            for app in $(ls ${dir}/); do
-              cd ${dir}/${app}
-              helm lint -f=../../values/${{ vars.TEAM }}-gitops/${dir}/${app}/${{ vars.ENVIRONMENT }}-values.yml . &
-              wait $!
-              cd ${original_dir};
-            done;
-          done;
+            ./scripts/lint.sh \
+              "${{ vars.TARGET_LINT_DIRECTORIES }}" \
+              "${{ vars.TEAM }}" \
+              "${{ vars.ENVIRONMENT }}" \
+              "false"
     
 #We use -ignore-missing-schemas to exclude custom CRDs for simplicity/demo purposes
 #We use -strict to disallow additional properties not in schema or duplicated keys
       - name: Kubeconform validate all app manifests
         run: |
-          set -e -E -u -o pipefail
-          for dir in ${{ vars.TARGET_LINT_DIRECTORIES }}; do
-            original_dir=$(pwd)
-            echo "===VALIDATING K8S $dir MANIFESTS==="
-            for app in $(ls ${dir}/); do
-              cd ${dir}/${app}
-              helm template . -f=../../values/${{ vars.TEAM }}-gitops/${dir}/${app}/${{ vars.ENVIRONMENT }}-values.yml | kubeconform -ignore-missing-schemas -strict &
-              wait $!
-              cd ${original_dir};
-            done;
-          done;
+          ./scripts/lint.sh \
+            "${{ vars.TARGET_LINT_DIRECTORIES }}" \
+            "${{ vars.TEAM }}" \
+            "${{ vars.ENVIRONMENT }}" \
+            "true"
