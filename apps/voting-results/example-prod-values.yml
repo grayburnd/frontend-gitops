@@ -1,0 +1,89 @@
+team: frontend
+environment: prod
+labels:
+  app: voting
+  component: results
+  env: prod
+  team: frontend
+replicas: "1"
+aws:
+  accountId: "123456789123"
+  region: us-east-1
+securityContext:
+  runAsGroup: 999 #appgroup
+  runAsNonRoot: true
+  runAsUser: 999 #appuser
+  fsGroup: 999
+image:
+  name: voting-results
+  tag: 8cc546622ace161a34dff39c2a808b44ccc83a6d
+ports:
+  - containerPort: 80
+envFrom: #[]
+  - configMapRef:
+      name: postgres-connection
+env: #[]
+  - name: BASE_PATH
+    value: /results
+  - name: DB_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: db-admin.postgres.credentials
+        key: username
+  - name: DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: db-admin.postgres.credentials
+        key: password
+gateway:
+  name: pub-gateway
+  namespace: platform-prod
+service:
+  port:
+    number: 8080
+    name: web
+  type: ClusterIP ##For IP Target Type
+  targetPort: "80"
+  protocol: TCP
+httpRoute:
+  rules:
+    matches:
+      - path:
+          type: PathPrefix
+          value: /results
+    filters:
+      - type: URLRewrite
+        urlRewrite:
+          path:
+            type: ReplaceFullPath
+            replaceFullPath: /
+targetGroup:
+  path: /
+scaling:
+  minReplicas: 1
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 60
+  targetMemoryUtilizationPercentage: 60
+resources:
+  requests:
+    cpu: "0.25"
+    memory: "0.25Gi"
+pdb:
+  minAvailable: 1
+livenessProbe:
+  httpGet:
+    path: /
+    port: 80
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 20
+readinessProbe:
+  httpGet:
+    path: /
+    port: 80
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  successThreshold: 1
+  timeoutSeconds: 20
+  failureThreshold: 6
